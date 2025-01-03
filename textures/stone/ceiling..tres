@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://c58k45kpdnr37"]
+
+[ext_resource type="Texture2D" uid="uid://bx0ggq20fpl4q" path="res://textures/stone/ceiling..png" id="1_guvom"]
+
+[resource]
+albedo_texture = ExtResource("1_guvom")
+metallic_specular = 0.0
+texture_filter = 2

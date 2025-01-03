@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Weapon" load_steps=3 format=3 uid="uid://sutjn1dqnlwv"]
+
+[ext_resource type="PackedScene" uid="uid://2d3cyxiwqiuk" path="res://assets/weapons/guns/pistol1.glb" id="1_ffnrv"]
+[ext_resource type="Script" path="res://scripts/common/weapons/base_wpn_class.gd" id="1_wc278"]
+
+[resource]
+script = ExtResource("1_wc278")
+name = "Energy Pistol"
+desc = "v1.01"
+type = "pistol"
+scene = ExtResource("1_ffnrv")
+camera_position = Vector3(-0.154, 1.044, 0.181)
+camera_scale = Vector3(0.2, 0.2, 0.2)
+camera_rotation = Vector3(-82.2, 57.8, -157.6)
+particle_color = Color(0, 0, 0, 1)
+attack_speed = 2.0
+spread = 1.0
+health_damage = 10.0
+shield_damage = 10.0
+shot_amount = 1
+attack_dist = 50.0

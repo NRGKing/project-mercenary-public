@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Weapon" load_steps=3 format=3 uid="uid://dnxglipax30ks"]
+
+[ext_resource type="Script" path="res://scripts/common/weapons/base_wpn_class.gd" id="1_o717h"]
+[ext_resource type="PackedScene" uid="uid://csa2apx1ngc7p" path="res://assets/weapons/melee/sword1.glb" id="1_ytic6"]
+
+[resource]
+script = ExtResource("1_o717h")
+name = "Sword2"
+desc = "basic sword"
+type = "katana"
+scene = ExtResource("1_ytic6")
+camera_position = Vector3(2.878, 1.183, 0.331)
+camera_scale = Vector3(2, 2, 2)
+camera_rotation = Vector3(0, 0, -180)
+particle_color = Color(0, 0, 0, 1)
+attack_speed = 1.5
+spread = 0.001
+health_damage = 20.0
+shield_damage = 60.0
+shot_amount = 1
+attack_dist = 3.0

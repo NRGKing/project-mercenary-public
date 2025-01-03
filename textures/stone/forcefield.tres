@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://5y3wk57cd8jc"]
+
+[ext_resource type="Texture2D" uid="uid://b6cn0a1nft1ne" path="res://textures/stone/forcefield.png" id="1_uvufy"]
+
+[resource]
+transparency = 1
+albedo_texture = ExtResource("1_uvufy")
+metallic_specular = 0.0
+texture_filter = 2

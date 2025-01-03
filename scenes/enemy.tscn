@@ -1,0 +1,239 @@
+[gd_scene load_steps=37 format=3 uid="uid://lwsbw3tihv8t"]
+
+[ext_resource type="Script" path="res://scripts/npc/combat_npc/npc_combat_controller.gd" id="1_slg8k"]
+[ext_resource type="Script" path="res://scripts/common/humanoid/char_model.gd" id="2_xv6fx"]
+[ext_resource type="Script" path="res://scripts/npc/combat_npc/npc_attack_handler.gd" id="3_irh6s"]
+[ext_resource type="Script" path="res://scripts/player/combat/attacks/switch.gd" id="4_hrr6q"]
+[ext_resource type="Script" path="res://scripts/npc/combat_npc/movement/npc_mvmt_handler.gd" id="4_sifq6"]
+[ext_resource type="Script" path="res://scripts/npc/combat_npc/movement/idle.gd" id="5_8fxxf"]
+[ext_resource type="Script" path="res://scripts/player/combat/attacks/none.gd" id="5_b7mor"]
+[ext_resource type="Script" path="res://scripts/common/weapons/base_wpn_class.gd" id="5_ilb3v"]
+[ext_resource type="Script" path="res://scripts/player/combat/attacks/attack.gd" id="6_3gwou"]
+[ext_resource type="Script" path="res://scripts/npc/combat_npc/movement/walk.gd" id="6_apdpn"]
+[ext_resource type="Script" path="res://scripts/npc/combat_npc/input/ai_input_handler.gd" id="7_5akqx"]
+[ext_resource type="Script" path="res://scripts/player/combat/attacks/parry.gd" id="7_v2tjb"]
+[ext_resource type="Script" path="res://scripts/common/weapon_types/pistol.gd" id="8_77xlu"]
+[ext_resource type="Script" path="res://scripts/npc/combat_npc/input/states/chase.gd" id="8_sb5kr"]
+[ext_resource type="Script" path="res://scripts/common/weapon_types/rifle.gd" id="9_g1tpn"]
+[ext_resource type="Script" path="res://scripts/npc/combat_npc/input/states/flee.gd" id="9_mdcyu"]
+[ext_resource type="Script" path="res://scripts/common/weapon_types/katana.gd" id="10_0pqlm"]
+[ext_resource type="Script" path="res://scripts/npc/combat_npc/input/states/hold.gd" id="10_2cj2u"]
+[ext_resource type="Script" path="res://scripts/player/camera_handler.gd" id="19_6xhe0"]
+[ext_resource type="Script" path="res://scripts/common/humanoid/dead.gd" id="21_6dbuk"]
+[ext_resource type="Script" path="res://scenes/guns/bullet_particles.gd" id="21_yidyr"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_fh2m7"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_6f8p4"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_aykxt"]
+
+[sub_resource type="Resource" id="Resource_fq8qw"]
+metadata/__load_path__ = "res://scenes/guns/pistol_1.tscn"
+
+[sub_resource type="Resource" id="Resource_bt4aa"]
+script = ExtResource("5_ilb3v")
+name = "Energy Pistol"
+desc = "v1.01"
+type = "pistol"
+scene = SubResource("Resource_fq8qw")
+camera_position = Vector3(0.001, -0.004, 0)
+camera_scale = Vector3(0.006, 0.006, 0.006)
+camera_rotation = Vector3(0, 180, 0)
+particle_color = Color(0, 0, 0, 1)
+attack_speed = 2.0
+spread = 1.0
+health_damage = 10.0
+shield_damage = 10.0
+shot_amount = 1
+attack_dist = 300.0
+
+[sub_resource type="PrismMesh" id="PrismMesh_yot8v"]
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_75ehe"]
+
+[sub_resource type="Gradient" id="Gradient_0ju4h"]
+offsets = PackedFloat32Array(0, 0.995575)
+colors = PackedColorArray(0.0375204, 0.275378, 1, 1, 0, 0.513726, 0.886275, 0.360784)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_h5gp8"]
+gradient = SubResource("Gradient_0ju4h")
+
+[sub_resource type="Curve" id="Curve_x4dl0"]
+_data = [Vector2(0.484252, 1), 0.0, 0.0, 0, 0, Vector2(0.996063, 0.45477), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_1rlwb"]
+curve = SubResource("Curve_x4dl0")
+
+[sub_resource type="Curve" id="Curve_g4wdh"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.799213, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_poc8k"]
+curve = SubResource("Curve_g4wdh")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_uh2cr"]
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 30.0
+initial_velocity_max = 30.0
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_poc8k")
+color = Color(0.0862745, 0.396078, 1, 1)
+color_ramp = SubResource("GradientTexture1D_h5gp8")
+emission_curve = SubResource("CurveTexture_1rlwb")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_3blcx"]
+top_radius = 0.01
+bottom_radius = 0.01
+height = 0.03
+
+[node name="enemy" type="CharacterBody3D" node_paths=PackedStringArray("char_handler", "input_handler", "attack_handler")]
+script = ExtResource("1_slg8k")
+char_handler = NodePath("CharHandler")
+input_handler = NodePath("NpcInputHandler")
+attack_handler = NodePath("AttackHandler")
+can_attack = false
+
+[node name="standing_collision_shape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_fh2m7")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="standing_collision_shape"]
+mesh = SubResource("CapsuleMesh_6f8p4")
+
+[node name="crouching_collision_shape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_aykxt")
+
+[node name="head_collision" type="RayCast3D" parent="."]
+target_position = Vector3(0, 2, 0)
+
+[node name="CharHandler" type="Node" parent="."]
+script = ExtResource("2_xv6fx")
+MAX_HEALTH = 10.0
+MAX_SHIELD = 10.0
+
+[node name="AttackHandler" type="Node" parent="." node_paths=PackedStringArray("player", "camera_3d", "weapon_type")]
+script = ExtResource("3_irh6s")
+player = NodePath("..")
+camera_3d = NodePath("../head/eyes/Camera3D")
+weapon_type = NodePath("../WeaponTypes/Pistol")
+equipped_weapon = SubResource("Resource_bt4aa")
+
+[node name="Switch" type="Node" parent="AttackHandler" node_paths=PackedStringArray("attack_handler")]
+script = ExtResource("4_hrr6q")
+attack_handler = NodePath("..")
+
+[node name="None" type="Node" parent="AttackHandler"]
+script = ExtResource("5_b7mor")
+
+[node name="Attack" type="Node" parent="AttackHandler" node_paths=PackedStringArray("attack_handler")]
+script = ExtResource("6_3gwou")
+attack_handler = NodePath("..")
+
+[node name="Parry" type="Node" parent="AttackHandler" node_paths=PackedStringArray("char_model", "attack_handler")]
+script = ExtResource("7_v2tjb")
+char_model = NodePath("../../CharHandler")
+attack_handler = NodePath("..")
+
+[node name="WeaponTypes" type="Node" parent="."]
+
+[node name="Pistol" type="Node" parent="WeaponTypes" node_paths=PackedStringArray("attack_handler", "bullet_particles")]
+script = ExtResource("8_77xlu")
+attack_handler = NodePath("../../AttackHandler")
+bullet_particles = NodePath("../../head/BulletParticles")
+
+[node name="Rifle" type="Node" parent="WeaponTypes" node_paths=PackedStringArray("attack_handler")]
+script = ExtResource("9_g1tpn")
+attack_handler = NodePath("../../AttackHandler")
+
+[node name="Shotgun" type="Node" parent="WeaponTypes"]
+
+[node name="Katana" type="Node" parent="WeaponTypes" node_paths=PackedStringArray("attack_handler")]
+script = ExtResource("10_0pqlm")
+attack_handler = NodePath("../../AttackHandler")
+uses_combo = true
+
+[node name="Longsword" type="Node" parent="WeaponTypes"]
+
+[node name="MovementHandler" type="Node" parent="." node_paths=PackedStringArray("standing_collision_shape", "crouch_collision_shape", "head_collision", "character", "head")]
+script = ExtResource("4_sifq6")
+standing_collision_shape = NodePath("../standing_collision_shape")
+crouch_collision_shape = NodePath("../crouching_collision_shape")
+head_collision = NodePath("../head_collision")
+character = NodePath("..")
+head = NodePath("../head")
+turn_speed = 45.0
+
+[node name="Idle" type="Node" parent="MovementHandler"]
+script = ExtResource("5_8fxxf")
+
+[node name="Walk" type="Node" parent="MovementHandler"]
+script = ExtResource("6_apdpn")
+
+[node name="NpcInputHandler" type="Node" parent="." node_paths=PackedStringArray("char_controller", "nav_agent", "chase_node", "flee_node", "hold_position_node")]
+script = ExtResource("7_5akqx")
+char_controller = NodePath("..")
+nav_agent = NodePath("../NavigationAgent")
+target_distance = 10.0
+assigned_action = "hold_pos"
+preferred_attack = "melee"
+chase_node = NodePath("Chase")
+flee_node = NodePath("Flee")
+hold_position_node = NodePath("Hold")
+
+[node name="Chase" type="Node" parent="NpcInputHandler" node_paths=PackedStringArray("handler")]
+script = ExtResource("8_sb5kr")
+handler = NodePath("..")
+
+[node name="Flee" type="Node" parent="NpcInputHandler" node_paths=PackedStringArray("handler")]
+script = ExtResource("9_mdcyu")
+handler = NodePath("..")
+
+[node name="Hold" type="Node" parent="NpcInputHandler" node_paths=PackedStringArray("handler")]
+script = ExtResource("10_2cj2u")
+hold_point = Vector3(12, 5, 9)
+handler = NodePath("..")
+
+[node name="DeadHandler" type="Node" parent="." node_paths=PackedStringArray("character")]
+script = ExtResource("21_6dbuk")
+character = NodePath("..")
+
+[node name="NavigationAgent" type="NavigationAgent3D" parent="."]
+
+[node name="head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.577, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="head"]
+transform = Transform3D(1.91069e-15, -4.37114e-08, 1, -1, -4.37114e-08, 0, 4.37114e-08, -1, -4.37114e-08, 0, 0, -0.493769)
+mesh = SubResource("PrismMesh_yot8v")
+
+[node name="eyes" type="Node3D" parent="head"]
+
+[node name="Eyes" type="RayCast3D" parent="head/eyes"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.496002)
+
+[node name="Hitbox" type="Area3D" parent="head/eyes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.280058, -0.831031)
+
+[node name="Collision" type="CollisionShape3D" parent="head/eyes/Hitbox"]
+shape = SubResource("BoxShape3D_75ehe")
+
+[node name="Camera3D" type="Camera3D" parent="head/eyes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0498034, -0.108199)
+near = 0.001
+script = ExtResource("19_6xhe0")
+
+[node name="BulletParticles" type="Node3D" parent="head"]
+transform = Transform3D(-7.22606, -6.31722e-07, 2.76135e-14, 0, -3.15861e-07, -7.22606, 6.31722e-07, -7.22606, 3.15861e-07, -4.53128e-08, -2.26564e-08, -0.518318)
+script = ExtResource("21_yidyr")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="head/BulletParticles"]
+transform = Transform3D(0.99999, 0.00140991, 0.00428294, -0.00141005, -0.804438, 0.594035, 0.0042829, -0.594035, -0.804428, 0, 0, 0)
+emitting = false
+amount = 100
+process_material = SubResource("ParticleProcessMaterial_uh2cr")
+draw_pass_1 = SubResource("CylinderMesh_3blcx")
